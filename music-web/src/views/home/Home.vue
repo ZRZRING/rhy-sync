@@ -39,7 +39,7 @@ const handleCommand = (command) => {
             </el-icon>
             <span>音频管理</span>
           </el-menu-item>
-          <el-menu-item index="/vedio">
+          <el-menu-item index="1-2">
             <el-icon>
               <VideoCamera />
             </el-icon>
@@ -63,6 +63,12 @@ const handleCommand = (command) => {
             <VideoPlay />
           </el-icon>
           <span>评论管理</span>
+        </el-menu-item>
+        <el-menu-item index="5">
+          <el-icon>
+            <VideoPlay />
+          </el-icon>
+          <span>歌单管理</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
