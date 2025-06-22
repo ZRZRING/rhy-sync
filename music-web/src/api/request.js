@@ -64,5 +64,25 @@ export function post(url, data) {
     }
   });
 }
+export function put(url, data) {
+  return reqeust({
+    url,
+    method: "put",
+    data:JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}
+export function del(url, data) {
+  return reqeust({
+    url,
+    method: "delete",
+    data:JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}
 
 export { baseURL };

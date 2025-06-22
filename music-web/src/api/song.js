@@ -1,5 +1,5 @@
 import {get,post} from './request'
-export function getSongList(params) {
+export function getSongPage(params) {
   return get('/song/page',params)
 }
 

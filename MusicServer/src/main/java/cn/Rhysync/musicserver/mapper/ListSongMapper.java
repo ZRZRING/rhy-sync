@@ -1,4 +1,9 @@
 package cn.Rhysync.musicserver.mapper;
 
-public interface ListSongMapper {
+import cn.Rhysync.musicserver.domain.entity.ListSong;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ListSongMapper extends BaseMapper<ListSong> {
 }

@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2025-06-18
  */
 public interface ISongService extends IService<Song> {
-
 }
