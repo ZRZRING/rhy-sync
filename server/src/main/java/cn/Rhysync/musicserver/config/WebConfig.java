@@ -28,15 +28,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 使用绝对路径，确保路径正确
-        String basePath = "file:D:/mres/";
+        String basePath = "./src/main/resources/static";
 
         // 检查目录是否存在
-        File songDir = new File(basePath + "song/");
-        File imgDir = new File(basePath + "images/");
+        File songDir = new File(basePath + "/song");
+        File imgDir = new File(basePath + "/img");
 
         System.out.println("静态资源映射配置:");
-        System.out.println("音乐文件映射: /song/** -> " + basePath + "song/");
-        System.out.println("图片文件映射: /img/** -> " + basePath + "images/");
+        System.out.println("音乐文件映射: /song/** -> " + basePath + "/song");
+        System.out.println("图片文件映射: /img/** -> " + basePath + "/img");
         System.out.println("音乐目录是否存在: " + songDir.exists());
         System.out.println("图片目录是否存在: " + imgDir.exists());
 
@@ -52,11 +52,11 @@ public class WebConfig implements WebMvcConfigurer {
 
         //映射本地音乐文件
         registry.addResourceHandler("/song/**")
-                .addResourceLocations(basePath + "song/");
+                .addResourceLocations(basePath + "/song");
 
         //映射本地图片文件
         registry.addResourceHandler("/img/**")
-                .addResourceLocations(basePath + "images/");
+                .addResourceLocations(basePath + "/img");
     }
     //跨域配置
     @Override

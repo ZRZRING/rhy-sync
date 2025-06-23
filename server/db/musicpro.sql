@@ -11,7 +11,7 @@
  Target Server Version : 80039 (8.0.39)
  File Encoding         : 65001
 
- Date: 22/06/2025 23:33:36
+ Date: 23/06/2025 16:01:25
 */
 
 SET NAMES utf8mb4;
@@ -26,13 +26,15 @@ CREATE TABLE `admin`  (
   `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '账号',
   `password` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '密码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '管理员' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '管理员' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
 INSERT INTO `admin` VALUES (1, 'admin', '123');
 INSERT INTO `admin` VALUES (2, 'admin1', '1');
+INSERT INTO `admin` VALUES (3, '1', '1');
+INSERT INTO `admin` VALUES (4, '李维辰', '123456');
 
 -- ----------------------------
 -- Table structure for collect
@@ -118,7 +120,6 @@ INSERT INTO `comment` VALUES (62, 29, 1, NULL, 1, 'safa', '2024-01-12 10:58:20',
 INSERT INTO `comment` VALUES (63, 29, 1, NULL, 2, 'asfdasf', '2024-01-12 11:03:03', 0);
 INSERT INTO `comment` VALUES (64, 29, 1, NULL, 2, 'nihao', '2024-01-12 11:03:08', 0);
 INSERT INTO `comment` VALUES (65, 29, 1, NULL, 2, 'jakfsjnajklsf', '2024-01-12 11:03:44', 0);
-INSERT INTO `comment` VALUES (66, 29, 1, NULL, 9, '太棒了', '2024-01-12 11:05:53', 0);
 
 -- ----------------------------
 -- Table structure for consumer
@@ -138,13 +139,12 @@ CREATE TABLE `consumer`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '前端用户' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '前端用户' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of consumer
 -- ----------------------------
-INSERT INTO `consumer` VALUES (2, '012', '012', 0, '13754803255', 'love@gmail.com', '2019-04-24 00:00:00', '我就喜欢吃', '北京', '/img/user.jpg', '2019-01-05 15:02:45', '2020-03-23 01:24:59');
-INSERT INTO `consumer` VALUES (8, 'tawuhen', '123', 0, '', '192673541@qq.com', '2019-04-25 18:58:39', '你好', '北京', '/img/user.jpg', '2019-04-25 00:28:58', '2019-04-25 18:58:39');
+INSERT INTO `consumer` VALUES (8, 'tawuhe', '123', 0, '', '192673541@qq.com', '2019-04-25 18:58:39', '你好', '北京', '/img/user.jpg', '2019-04-25 00:28:58', '2019-04-25 18:58:39');
 INSERT INTO `consumer` VALUES (16, '1234321', '123', 1, '13754803257', '123@qq.com', '2020-03-08 17:25:45', '', '', '/img/user.jpg', '2020-03-08 17:25:45', '2020-03-08 17:25:45');
 INSERT INTO `consumer` VALUES (20, '234321', '123', 0, '15754801257', '12987@qq.com', '2020-03-08 23:41:22', '', '', '/img/user.jpg', '2020-03-08 23:41:22', '2020-03-08 23:41:22');
 INSERT INTO `consumer` VALUES (21, 'yoonaA', '123', 1, NULL, NULL, '2020-03-25 00:00:00', '', '', '/img/user.jpg', '2020-03-21 22:18:33', '2020-03-21 22:18:33');
@@ -256,13 +256,13 @@ CREATE TABLE `list_song`  (
   `song_id` int NULL DEFAULT NULL COMMENT '歌曲id',
   `song_list_id` int NULL DEFAULT NULL COMMENT '歌单id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 210 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '歌单包含歌曲列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2142646276 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '歌单包含歌曲列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of list_song
 -- ----------------------------
-INSERT INTO `list_song` VALUES (-1130856446, 2, 84);
-INSERT INTO `list_song` VALUES (-1130856445, 1, 84);
+INSERT INTO `list_song` VALUES (-1233768447, 21, 84);
+INSERT INTO `list_song` VALUES (-1233768446, 2, 84);
 INSERT INTO `list_song` VALUES (3, 5, 2);
 INSERT INTO `list_song` VALUES (4, 7, 2);
 INSERT INTO `list_song` VALUES (5, 11, 2);
@@ -430,7 +430,6 @@ INSERT INTO `list_song` VALUES (170, 88, 74);
 INSERT INTO `list_song` VALUES (171, 99, 74);
 INSERT INTO `list_song` VALUES (172, 88, 73);
 INSERT INTO `list_song` VALUES (173, 103, 78);
-INSERT INTO `list_song` VALUES (174, 103, 84);
 INSERT INTO `list_song` VALUES (175, 103, 75);
 INSERT INTO `list_song` VALUES (176, 103, 76);
 INSERT INTO `list_song` VALUES (177, 103, 77);
@@ -466,6 +465,9 @@ INSERT INTO `list_song` VALUES (206, 112, 24);
 INSERT INTO `list_song` VALUES (207, 113, 40);
 INSERT INTO `list_song` VALUES (208, 109, 8);
 INSERT INTO `list_song` VALUES (209, 107, 23);
+INSERT INTO `list_song` VALUES (2142646273, 26, 84);
+INSERT INTO `list_song` VALUES (2142646274, 27, 84);
+INSERT INTO `list_song` VALUES (2142646275, 28, 84);
 
 -- ----------------------------
 -- Table structure for rank
@@ -558,7 +560,7 @@ CREATE TABLE `singer`  (
   `location` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '地区',
   `introduction` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '简介',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 58 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '歌手' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 59 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '歌手' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of singer
@@ -600,7 +602,6 @@ INSERT INTO `singer` VALUES (40, 'Josh Ritter', 1, '/img/singerPic/1586090939016
 INSERT INTO `singer` VALUES (41, 'Tone Damli Aaberge', 0, '/img/singerPic/1586091104616Tone Damli Aaberge.jpg', '1988-04-12 00:00:00', '挪威', 'Tone Damli Aaberge/Tone Damli，是位来自挪威的年轻女歌手。当她才17岁的时候，曾参加了2005年那届挪威偶像。可惜她在比赛中获得亚军，屈居于Jorun Stiansen之后。她是2009年欧洲电视网歌唱大赛里的总决赛选手，她演唱了一首\"Butterflies\"，可惜最后也只得到亚军，屈居于Alexander Rybak之后');
 INSERT INTO `singer` VALUES (42, 'Sanna Nielsen', 0, '/img/singerPic/1586091210109Sanna Nielsen.jpg', '1984-11-27 00:00:00', '瑞典', 'Sanna Nielsen（仙娜·尼利森）出生于1984年11月27日，瑞典音乐才女，早在她12岁时就发行了其个人的第一张专辑，并且取得了相当不错的成绩，之前她一直是发行瑞典语的专辑和单曲，《Stronger》是她08年的新专，也是她第一张英文专辑，整张专的旋律给人很美很大气的感觉。');
 INSERT INTO `singer` VALUES (43, 'Jessica', 0, '/img/singerPic/1586091653843郑秀妍.jpg', '1989-04-18 00:00:00', '韩国', '郑秀妍（Jessica Jung），1989年4月18日出生于美国加利福尼亚州旧金山市，歌手、演员、设计师。2000年，郑秀妍回国探亲时被韩国SM娱乐有限公司发掘，成为其旗下练习生。2007年8月，以演唱团体少女时代成员身份正式出道，是组合里训练时间最长的成员。2009年，首次在音乐剧《金发尤物》中担任主角“艾莉·伍兹”。2012年，首次以演员身份参演《暴力罗曼史》。');
-INSERT INTO `singer` VALUES (56, '12', 0, '', NULL, '0', '');
 
 -- ----------------------------
 -- Table structure for song
@@ -631,7 +632,7 @@ CREATE TABLE `song`  (
 -- ----------------------------
 -- Records of song
 -- ----------------------------
-INSERT INTO `song` VALUES (1, 1, '张杰-仰望星空', '明天过后', '2018-12-26 08:40:14', '2019-04-25 20:14:20', '/img/songPic/haikuotiankong.jpg', '[ti:仰望星空]\n[ar:张杰]\n[00:00.266]\n[00:00.570]作曲：曾明维（Taiwan）\n[00:00.670]作词 : 邹振东\n[00:00.770]这一天我开始仰望星空发现\n[00:07.238]星并不远梦并不远只要你踮起脚尖\n[00:17.11]我相信有一双手把我轻轻牵到你的跟前\n[00:29.233]我相信有一根线将梦想与现实相连\n[00:45.389]我相信有一种缘会把所有的偶然都实现\n[00:57.346]我相信就是这一天命运开始改变\n[01:08.85]这一天我开始仰望星空发现\n[01:14.559]星并不远梦并不远只要你踮起脚尖\n[01:22.154]我从此不再彷徨也不再腼腆\n[01:28.621]张开双臂和你一起飞的更高看的更远\n[01:41.286]Music\n[01:52.845]我相信有一种缘会把所有的偶然都实现\n[02:04.543]我相信就是这一天命运开始改变\n[02:15.135]这一天我开始仰望星空发现\n[02:21.668]星并不远梦并不远只要你踮起脚尖\n[02:29.235]我从此不再彷徨也不再腼腆\n[02:35.717]张开双臂和你一起飞的更高看的更远\n[02:48.45]开始仰望星空感觉爱的时间空间\n[02:55.353]寻找生命中最灿烂的亮点\n[03:01.278]这一天我开始仰望星空发现\n[03:07.439]星并不远梦并不远只要你踮起脚尖\n[03:14.888]我从此不再彷徨也不再腼腆\n[03:21.630]张开双臂和你一起飞的更高看的更远\n[03:29.404]这一天我开始仰望星空发现\n[03:35.634]星并不远梦并不远只要你踮起脚尖\n[03:43.477]我从此不再彷徨也不再腼腆\n[03:49.834]张开双臂和你一起飞的更高看的更远\n[04:02.854]', '/song/张杰-仰望星空.mp3', 0, 0, 0, 0, NULL);
+INSERT INTO `song` VALUES (1, 1, '张杰-仰望星空', '明天过后', '2018-12-26 08:40:14', '2025-06-23 14:58:16', '/img/songPic/haikuotiankong.jpg', '[ti:仰望星空]\n[ar:张杰]\n[00:00.266]\n[00:00.570]作曲：曾明维（Taiwan）\n[00:00.670]作词 : 邹振东\n[00:00.770]这一天我开始仰望星空发现\n[00:07.238]星并不远梦并不远只要你踮起脚尖\n[00:17.11]我相信有一双手把我轻轻牵到你的跟前\n[00:29.233]我相信有一根线将梦想与现实相连\n[00:45.389]我相信有一种缘会把所有的偶然都实现\n[00:57.346]我相信就是这一天命运开始改变\n[01:08.85]这一天我开始仰望星空发现\n[01:14.559]星并不远梦并不远只要你踮起脚尖\n[01:22.154]我从此不再彷徨也不再腼腆\n[01:28.621]张开双臂和你一起飞的更高看的更远\n[01:41.286]Music\n[01:52.845]我相信有一种缘会把所有的偶然都实现\n[02:04.543]我相信就是这一天命运开始改变\n[02:15.135]这一天我开始仰望星空发现\n[02:21.668]星并不远梦并不远只要你踮起脚尖\n[02:29.235]我从此不再彷徨也不再腼腆\n[02:35.717]张开双臂和你一起飞的更高看的更远\n[02:48.45]开始仰望星空感觉爱的时间空间\n[02:55.353]寻找生命中最灿烂的亮点\n[03:01.278]这一天我开始仰望星空发现\n[03:07.439]星并不远梦并不远只要你踮起脚尖\n[03:14.888]我从此不再彷徨也不再腼腆\n[03:21.630]张开双臂和你一起飞的更高看的更远\n[03:29.404]这一天我开始仰望星空发现\n[03:35.634]星并不远梦并不远只要你踮起脚尖\n[03:43.477]我从此不再彷徨也不再腼腆\n[03:49.834]张开双臂和你一起飞的更高看的更远\n[04:02.854]', '/song/张杰-仰望星空.mp3', 0, 0, 0, 0, NULL);
 INSERT INTO `song` VALUES (2, 1, '张杰-他不懂', '爱，不解释', '2018-12-26 11:24:13', '2019-05-24 00:15:25', '/img/songPic/tabudong1.jpg', '[00:00.00] 作曲 : 周振霆/代岳东\n[00:01.00] 作词 : 唐湘智\n[00:19.410]他留给你是背影\n[00:25.060]关于爱情只字不提\n[00:29.850]害你哭红了眼睛\n[00:34.780]他把谎言说的竟然那么动听\n[00:40.750]他不止一次骗了你\n[00:44.710]不值得你再为他伤心\n[00:48.380]他不懂你的心假装冷静\n[00:53.180]他不懂爱情把它当游戏\n[00:56.170]他不懂表明相爱这件事\n[01:00.060]除了对不起就只剩叹息\n[01:04.060]他不懂你的心为何哭泣\n[01:08.950]窒息到快要不能呼吸\n[01:16.700]喔喔\n[01:18.880]他不懂你的心\n[01:23.230]\n[01:36.550]他把回忆留给你\n[01:43.640]连同忧伤强加给你\n[01:48.300]对你说来不公平\n[01:54.610]他的谎言句句说的那么动听\n[01:58.750]他不止一次骗了你\n[02:03.640]不值得你再为他伤心\n[02:07.980]他不懂你的心假装冷静\n[02:11.880]他不懂爱情把它当游戏\n[02:15.720]他不懂表明相爱这件事\n[02:19.630]除了对不起就只剩叹息\n[02:23.960]他不懂你的心为何哭泣\n[02:27.970]窒息到快要不能呼吸\n[02:36.070]喔喔\n[02:38.630]他不懂你的心\n[02:42.630]\n[02:56.250]他不懂你的心假装冷静\n[02:59.990]他不懂爱情把它当游戏\n[03:03.860]他不懂表明相爱这件事\n[03:07.720]除了对不起就只剩叹息\n[03:11.570]他不懂你的心为何哭泣\n[03:15.640]窒息到快要不能呼吸\n[03:23.800]喔喔\n[03:26.320]他不懂你的心\n[03:49.834]张开双臂和你一起飞的更高看的更远\n[04:02.854]', '/song/张杰-他不懂.mp3', 0, 0, 0, 0, NULL);
 INSERT INTO `song` VALUES (3, 1, '张杰-天下', '明天过后', '2018-12-26 11:34:31', '2018-12-26 11:34:31', '/img/songPic/haikuotiankong.jpg', '[00:00.00] 作曲 : 刘吉宁\n[00:01.00] 作词 : 周毅\n[00:26.800]烽烟起寻爱似浪淘沙\n[00:33.700]遇见她如春水映梨花\n[00:40.400]挥剑断天涯相思轻放下\n[00:46.900]梦中我痴痴牵挂\n[00:53.900]顾不顾将相王侯\n[00:55.800]管不管万世千秋\n[00:57.800]求只求爱化解\n[00:58.900]这万丈红尘纷乱永无休\n[01:01.400]爱更爱天长地久\n[01:02.800]要更要似水温柔\n[01:04.800]谁在乎谁主春秋\n[01:06.900]一生有爱何惧风飞沙\n[01:10.100]悲白发留不住芳华\n[01:13.900]抛去江山如画换她笑面如花\n[01:17.100]抵过这一生空牵挂\n[01:20.100]心若无怨爱恨也随他\n[01:23.300]天地大情路永无涯\n[01:27.100]只为她袖手天下\n[01:32.900]\n[02:00.900]顾不顾将相王侯\n[02:02.700]管不管万世千秋\n[02:03.900]求只求爱化解\n[02:05.800]这万丈红尘纷乱永无休\n[02:07.900]爱更爱天长地久\n[02:09.900]要更要似水温柔\n[02:11.800]谁在乎谁主春秋\n[02:13.400]一生有爱何惧风飞沙\n[02:16.700]悲白发留不住芳华\n[02:20.900]抛去江山如画换她笑面如花\n[02:24.600]抵过这一生空牵挂\n[02:26.900]心若无怨爱恨也随他\n[02:30.700]天地大情路永无涯\n[02:33.900]只为她袖手天下\n[02:39.900]\n[02:40.300]一生有爱何惧风飞沙\n[02:43.700]悲白发留不住芳华\n[02:47.400]抛去江山如画换她笑面如花\n[02:50.900]抵过这一生空牵挂\n[02:53.900]心若无怨爱恨也随他\n[02:56.900]天地大情路永无涯\n[02:59.900]只为她袖手天下\n[03:05.900]\n[03:06.900]烽烟起寻爱似浪淘沙\n[03:13.300]遇见她如春水映梨花\n[03:20.100]挥剑断天涯相思轻放下\n[03:26.900]梦中我痴痴牵挂\n[03:32.900]', '/song/张杰-天下.mp3', 0, 0, 0, 0, NULL);
 INSERT INTO `song` VALUES (4, 1, '张杰-如果爱', '再爱我一回', '2018-12-26 11:47:15', '2019-04-24 21:13:52', '/img/songPic/haikuotiankong.jpg', '[00:00.00] 作曲 : 黎沸辉\n [00:01.00] 作词 : 黎沸辉\n[00:04.16]如果爱\n[00:16.77]ah~~~ah~~\n[00:34.50]我的心从没有搬到另一个地址\n[00:40.57]还是和你用同样一室的钥匙\n[00:48.19]你的眼泪一滴一滴将回忆淋湿\n[00:54.64]你的拥抱却让呼吸变得真实\n[01:02.40]相爱的人 我能如何选择\n[01:09.29]伤痛和快乐全都是重复的规则\n[01:16.22]如果爱只是拉拉扯扯\n[01:19.65]两个人都动弹不得\n[01:23.10]如果爱已经少了快乐\n[01:26.68]为何心痛不能割舍\n[01:30.25]如果爱已经慢慢褪色\n[01:33.83]两颗心都失去颜色\n[01:37.25]如果爱已是非爱不可\n[01:40.79]又何必问他是否值得\n[01:44.54]可爱情在猜疑下渐渐冰冷\n[02:01.08]我的心从没有搬到另一个地址\n[02:12.48]还是和你用同样一室的钥匙\n[02:20.14]你的眼泪一滴一滴将回忆淋湿\n[02:26.32]你的拥抱却让呼吸变得真实\n[02:34.11]相爱的人 我能如何选择\n[02:41.14]伤痛和快乐全都是重复的规则\n[02:45.35]如果爱只是拉拉扯扯\n[02:51.65]两个人都动弹不得\n[02:54.99]如果爱已经少了快乐\n[02:58.80]为何心痛不能割舍\n[03:02.11]如果爱已经慢慢褪色\n[03:05.67]两颗心都失去颜色\n[03:09.14]如果爱已是非爱不可\n[03:12.70]又何必问他是否值得\n[03:16.50]看爱情在猜疑下～\n[03:20.04]如果爱只是拉拉扯扯\n[03:23.02]两个人都动弹不得\n[03:25.41]如果爱已经少了快乐\n[03:30.42]为何心痛不能割舍\n[03:33.76]如果爱已经慢慢褪色\n[03:37.30]两颗心都失去颜色\n[03:40.74]如果爱已是非爱不可\n[03:44.17]又何必问他是否值得\n[03:48.39]看爱情在猜疑下渐渐冰冷\n[03:52.17]又何必问他是否值得\n[03:55.76]如果爱已是非爱 非爱不可～\n[03:59.28]两颗心都失去了颜色\n[04:03.00]看爱情在猜疑下渐渐冰冷\n[04:06.58]又何必问他是否值得\n[04:09.79]如果爱已是非爱 非爱不可～\n[04:13.49]两颗心都失去了颜色', '/song/张杰-如果爱.mp3', 0, 0, 0, 0, NULL);
@@ -741,7 +742,6 @@ INSERT INTO `song` VALUES (108, 40, 'Josh Ritter - Change of Time', 'Change of T
 INSERT INTO `song` VALUES (109, 40, 'Josh Ritter - Darlin', 'Darlin', '2019-06-03 01:37:14', '2019-06-03 01:37:14', '/img/songPic/2532175279910174.jpg', '[00:00:00]暂无歌词', '/song/Josh Ritter - Darlin.mp3', 0, 0, 0, 0, NULL);
 INSERT INTO `song` VALUES (110, 29, '胡伟立 - 太极乐', '太极乐', '2019-06-03 01:37:45', '2020-04-05 16:46:18', '/img/songPic/2537672838499056.jpg', '[00:00:00]暂无歌词', '/song/武聆音雄 - 太极乐.mp3', 0, 0, 0, 0, NULL);
 INSERT INTO `song` VALUES (112, 41, 'Tone Damli Aaberge - Stupid', 'Stupid', '2019-06-03 01:38:40', '2019-06-03 01:38:40', '/img/songPic/1775711278864263.jpg', '[00:00:00]暂无歌词', '/song/Tone Damli Aaberge - Stupid.mp3', 0, 0, 1, 1, NULL);
-INSERT INTO `song` VALUES (113, 42, 'Sanna Nielsen-Undo', 'Undo', '2019-06-03 01:39:09', '2019-06-03 01:39:09', '/img/songPic/1775711278864263.jpg', '[00:00:00]暂无歌词', '/song/Sanna Nielsen-Undo.mp3', 0, 0, 2, 2, NULL);
 
 -- ----------------------------
 -- Table structure for song_like
@@ -781,7 +781,7 @@ INSERT INTO `song_like` VALUES (15, 11, 1, 32, '2025-06-22 15:16:56', '2025-06-2
 INSERT INTO `song_like` VALUES (16, 14, 38, 115, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (17, 15, 35, 177, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (18, 16, 11, 42, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
-INSERT INTO `song_like` VALUES (19, 17, 49, 77, '2025-06-22 15:16:56', '2025-06-22 22:15:10');
+INSERT INTO `song_like` VALUES (19, 17, 49, 77, '2025-06-22 15:16:56', '2025-06-23 10:10:10');
 INSERT INTO `song_like` VALUES (20, 18, 11, 57, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (21, 19, 7, 154, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (22, 20, 1, 149, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
@@ -792,7 +792,7 @@ INSERT INTO `song_like` VALUES (26, 24, 15, 16, '2025-06-22 15:16:56', '2025-06-
 INSERT INTO `song_like` VALUES (27, 25, 45, 51, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (28, 26, 29, 59, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (29, 27, 7, 136, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
-INSERT INTO `song_like` VALUES (30, 28, 50, 159, '2025-06-22 15:16:56', '2025-06-22 22:15:10');
+INSERT INTO `song_like` VALUES (30, 28, 50, 159, '2025-06-22 15:16:56', '2025-06-23 15:09:52');
 INSERT INTO `song_like` VALUES (31, 29, 27, 36, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (32, 30, 36, 52, '2025-06-22 15:16:56', '2025-06-22 15:43:16');
 INSERT INTO `song_like` VALUES (33, 31, 0, 0, '2025-06-22 15:16:56', '2025-06-22 21:52:13');
@@ -1140,31 +1140,25 @@ CREATE TABLE `vedio`  (
   `regionid` int NOT NULL COMMENT '区域id',
   `versionid` int NOT NULL COMMENT '版本id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of vedio
 -- ----------------------------
-INSERT INTO `vedio` VALUES (1, 'Please Don\'t Go (Chart Attack 21.02.1998)', 'No Mercy', 15, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101003CDNmO2vRbRL.jpg?max_age=2592000', '/vedio/musicMV/1c79eb32591b4d2d6306eafcbe3b677d.mp4', 4, 2);
-INSERT INTO `vedio` VALUES (2, 'Zwei Herzen in der Sommernacht / Im Hafen deiner Sehnsucht (Die goldene Eins 29.10.2001)', 'Die Flippers', 10, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101001Kd70N0g9aHi.jpg?max_age=2592000', '/vedio/musicMV/1decbfd732cf842a049350b9084d3025.mp4', 4, 2);
-INSERT INTO `vedio` VALUES (3, 'Eu Não Valho Nada - Ao Vivo', 'Lagum', 0, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M10100039Oyn3iqbQZ.jpg?max_age=2592000', '/vedio/musicMV/2a40707ba2692d7c9d455aafb2340916.mp4', 4, 2);
-INSERT INTO `vedio` VALUES (4, 'I Like Chopin (ARD-Wunschkonzert 20.08.1987)', 'Gazebo', 6, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101001nwnKJ1lB7Ws.jpg?max_age=2592000', '/vedio/musicMV/4a1aa0acf86d439775bb427f203d0616.mp4', 4, 2);
-INSERT INTO `vedio` VALUES (5, '花絮Replay', '桂瑶', 20, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101002lgbdN0iGqzK.jpg?max_age=2592000', '/vedio/musicMV/6c569f00efbefbcade019dec57041a8f.mp4', 2, 2);
-INSERT INTO `vedio` VALUES (6, 'Speed of Light', 'The Glorious Sons', 30, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000000YwjBi1RUdQv.jpg?max_age=2592000', '/vedio/musicMV/198cc422dd00845cec11ddf33a2e1dfc.mp4', 4, 4);
-INSERT INTO `vedio` VALUES (7, 'Mar de whisky (Lyric Video)', 'Tarque', 14, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101001EJIQt474s1W.jpg?max_age=2592000', '/vedio/musicMV/af5d96e3d738310763060ff7fbceb98c.mp4', 4, 3);
-INSERT INTO `vedio` VALUES (8, '江波雨', '刘珂矣', 7, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000004SexQX21q3zp.jpg?max_age=2592000', '/vedio/musicMV/b1726fe3a02ce65519bbddd56629dd64.mp4', 2, 4);
-INSERT INTO `vedio` VALUES (9, '飛花落花', 'Cocco', 2, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000002KKB341VgCEc.jpg?max_age=2592000', '/vedio/musicMV/be901a2e33bb59447d37a7431c6b0a27.mp4', 6, 3);
-INSERT INTO `vedio` VALUES (10, '以心電信 (Live at LINE CUBE SHIBUYA 2023.4.23)', 'ORANGE RANGE', 8, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M0000023jCH52dEezb.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 2, 3);
-INSERT INTO `vedio` VALUES (11, 'feel (Dance ver.)', 'BMK', 20, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000000M6L0x1TJZjv.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 2, 4);
-INSERT INTO `vedio` VALUES (12, 'リュックと添い寝ごはん', '天国街道', 1, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000000WWfe20XQllB.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 3, 6);
-INSERT INTO `vedio` VALUES (13, 'avalanche', 'A夏目', 5, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101000V5DrW0FqYn8.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 3, 4);
-INSERT INTO `vedio` VALUES (14, 'じゃーね', 'FLYING KIDS', 6, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000003RVAbx1PwyAh.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 6, 4);
-INSERT INTO `vedio` VALUES (15, '寂寞的上海下起了孤单的雪', '孟庭苇', 500, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M101001yaAhp0hum1H.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 3, 5);
-INSERT INTO `vedio` VALUES (16, '为你写下这首情歌 (2023巡回演唱会Live版)', '五月天', 200, '2024-01-09', 'https://y.qq.com/music/photo_new/T015R640x360M101000368l40eSr6e.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 3, 3);
-INSERT INTO `vedio` VALUES (17, '겨울에도 꽃피울 만큼, 여름에도 눈이 올만큼 (flowers blooming in winter, snow falling in summer)', '유혜성', 100, '2024-01-06', 'https://y.qq.com/music/photo_new/T015R640x360M101000FgrjC1RmZtN.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 5, 4);
-INSERT INTO `vedio` VALUES (18, 'Flying, Deep in the Night (2023 MBC 歌谣大祭典)', '珉豪', 233, '2024-01-05', 'https://y.qq.com/music/photo_new/T015R640x360M0000039fS6h32AGSy.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 5, 7);
-INSERT INTO `vedio` VALUES (19, 'Do Not Touch (第74届NHK红白歌会)', 'MISAMO', 111, '2024-01-10', 'https://y.qq.com/music/photo_new/T015R640x360M000000rVhYt20JThT.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 6, 8);
-INSERT INTO `vedio` VALUES (20, 'BOGGLE BOGGLE (Japanese Ver.)', 'pororo', 2342, '2023-10-01', 'https://y.qq.com/music/photo_new/T015R640x360M000000BSJMs3DRgWA.jpg?max_age=2592000', '/vedio/musicMV/e3db823dce88335736a5b68549d32e2e.mp4', 6, 8);
+INSERT INTO `vedio` VALUES (35, '09ae2ee5ee5b95902cbfe8a72d41aa3b', 'Panjy', 918, '2025-06-22', '/vedio/09ae2ee5ee5b95902cbfe8a72d41aa3b.jpg', '/vedio/09ae2ee5ee5b95902cbfe8a72d41aa3b.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (36, '0d6004f97f7e88392d5f5c078efbab0b', 'Panjy', 761, '2025-06-22', '/vedio/0d6004f97f7e88392d5f5c078efbab0b.jpg', '/vedio/0d6004f97f7e88392d5f5c078efbab0b.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (37, '2b50adf1f0d6df742317820c00120ba9', 'Panjy', 459, '2025-06-22', '/vedio/2b50adf1f0d6df742317820c00120ba9.jpg', '/vedio/2b50adf1f0d6df742317820c00120ba9.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (38, '3323b86bc92b6850ebd5d92050ba8cb6', 'Panjy', 64, '2025-06-22', '/vedio/3323b86bc92b6850ebd5d92050ba8cb6.jpg', '/vedio/3323b86bc92b6850ebd5d92050ba8cb6.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (39, '5cc0cf6dacfd7dd2c69a6b457d7f96a8', 'Panjy', 234, '2025-06-22', '/vedio/5cc0cf6dacfd7dd2c69a6b457d7f96a8.jpg', '/vedio/5cc0cf6dacfd7dd2c69a6b457d7f96a8.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (40, '66ef954cc8218700d38d6b244f05fa89', 'Panjy', 322, '2025-06-22', '/vedio/66ef954cc8218700d38d6b244f05fa89.jpg', '/vedio/66ef954cc8218700d38d6b244f05fa89.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (41, '7eefe3a855fef8d6c9189f41ef9ee29e', 'Panjy', 654, '2025-06-22', '/vedio/7eefe3a855fef8d6c9189f41ef9ee29e.jpg', '/vedio/7eefe3a855fef8d6c9189f41ef9ee29e.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (42, '杭州', 'Panjy', 170, '2025-06-22', '/vedio/7ef93fd71056db82c871ce36da4c11c0.jpg', '/vedio/7ef93fd71056db82c871ce36da4c11c0.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (43, '84bbaed1f49cf795317e7d8ca7f9086a', 'Panjy', 965, '2025-06-22', '/vedio/84bbaed1f49cf795317e7d8ca7f9086a.jpg', '/vedio/84bbaed1f49cf795317e7d8ca7f9086a.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (44, '9b43af31943681c05d02fa9528354af5', 'Panjy', 587, '2025-06-22', '/vedio/9b43af31943681c05d02fa9528354af5.jpg', '/vedio/9b43af31943681c05d02fa9528354af5.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (45, '济南CCPC', 'Panjy', 808, '2025-06-22', '/vedio/b935c3182243c724d2ed2f8dde81d290.jpg', '/vedio/b935c3182243c724d2ed2f8dde81d290.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (46, '刀怒斩逆徒', 'Panjy', 673, '2025-06-22', '/vedio/bd003792363d984e3ec1c4167ae0dedc.jpg', '/vedio/bd003792363d984e3ec1c4167ae0dedc.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (49, '泸州老窖', 'Panjy', 533, '2025-06-22', '/vedio/ed345c1845b3d1c33731ede9ac22b4f1.jpg', '/vedio/ed345c1845b3d1c33731ede9ac22b4f1.mp4', 14, 1);
+INSERT INTO `vedio` VALUES (50, '塔山', 'Panjy', 269, '2025-06-22', '/vedio/fdbe3dea7f16c88a09f1f22b0f9eea84.jpg', '/vedio/fdbe3dea7f16c88a09f1f22b0f9eea84.mp4', 14, 1);
 
 -- ----------------------------
 -- Table structure for version

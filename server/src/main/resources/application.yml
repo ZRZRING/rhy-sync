@@ -15,4 +15,4 @@ mybatis-plus:
 
 # 文件存储路径
 file:
-  upload-dir: D:\mres
+  upload-dir: ./src/main/resources/static
