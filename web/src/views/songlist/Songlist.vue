@@ -105,8 +105,8 @@
 
       <template #footer>
         <el-button @click="addSongDialog.visible = false">取 消</el-button>
-        <el-button type="primary" @click="handleConfirmAddSongs">
-          确 定 添 加 (已选 {{ songSelection.length }} 首)
+        <el-button type="primary" @click="handleConfirmModifySongs">
+          确认选择 (已选 {{ songSelection.length }} 首)
         </el-button>
       </template>
     </el-dialog>
@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, nextTick } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Search, Refresh, Plus, View, Edit, Delete } from '@element-plus/icons-vue';
 import {
@@ -168,12 +168,14 @@ const detailDialog = reactive({
   songlistId: null,
   songlistTitle: '',
   songs: [],
+  initialSongIds: new Set(),
 });
 
 const addSongDialog = reactive({
   visible: false,
   loading: false,
 });
+const addSongTableRef = ref(null);
 const songSelection = ref([]); // 用于存储用户勾选的歌曲
 const availableSongs = ref([]); // 对话框中显示的歌曲列表
 const availableSongsTotal = ref(0); // 对话框中歌曲的总数
@@ -304,12 +306,14 @@ const handleViewDetails = async (row) => {
   detailDialog.songlistId = row.id;
   detailDialog.songlistTitle = row.title; // 使用行数据中的title
   detailDialog.songs = [];
+  detailDialog.initialSongIds.clear();
 
   try {
     const res = await getSonglistDetail(row.id);
     if (res.code === '0') {
       // 根据您的第二个返回示例，歌曲列表在 data.records 中
       detailDialog.songs = res.data.records;
+      detailDialog.initialSongIds = new Set(res.data.records.map(s => s.id));
     } else {
       ElMessage.error(res.msg || '获取歌单详情失败');
     }
@@ -362,6 +366,14 @@ const fetchAvailableSongs = async () => {
     if (res.code === '0') {
       availableSongs.value = res.data.records;
       availableSongsTotal.value = res.data.total;
+      await nextTick();
+      if (addSongTableRef.value) {
+        availableSongs.value.forEach((song) => {
+          if (detailDialog.initialSongIds.has(song.id)) {
+            addSongTableRef.value.toggleRowSelection(song, true);
+          }
+        });
+      }
     } else {
       ElMessage.error(res.msg || "获取歌曲列表失败");
     }
@@ -386,6 +398,55 @@ const handleSongSearch = () => {
  */
 const handleSongSelectionChange = (selection) => {
   songSelection.value = selection;
+};
+
+/**
+ * 批量处理歌单中的歌曲，添加/删除
+ */
+const handleConfirmModifySongs = async () => {
+  if (!detailDialog.songlistId) return;
+
+  // 获取最终确认勾选的歌曲ID集合
+  const finalSongIds = new Set(songSelection.value.map((s) => s.id));
+
+  // 与初始ID集合进行比较，计算出新增和移除的ID
+  const songsToAdd = [...finalSongIds].filter(
+    (id) => !detailDialog.initialSongIds.has(id)
+  );
+  const songsToRemove = [...detailDialog.initialSongIds].filter(
+    (id) => !finalSongIds.has(id)
+  );
+
+  if (songsToAdd.length === 0 && songsToRemove.length === 0) {
+    ElMessage.info("歌单歌曲未作任何更改");
+    addSongDialog.visible = false;
+    return;
+  }
+
+  try {
+    // 调用新的批量更新接口
+    await updateSongsInSonglist(detailDialog.songlistId, {
+      songsToAdd,
+      songsToRemove,
+    });
+
+    let message = "";
+    if (songsToAdd.length > 0)
+      message += `添加了 ${songsToAdd.length} 首歌曲。`;
+    if (songsToRemove.length > 0)
+      message += `移除了 ${songsToRemove.length} 首歌曲。`;
+    ElMessage.success(message.trim());
+
+    addSongDialog.visible = false;
+    // 操作成功后，刷新歌单详情
+    handleViewDetails({
+      id: detailDialog.songlistId,
+      title: detailDialog.songlistTitle,
+    });
+  } catch (error) {
+    console.error("批量更新歌单歌曲失败:", error);
+    ElMessage.error("更新歌单时发生错误");
+  }
 };
 
 /**

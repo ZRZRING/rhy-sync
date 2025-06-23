@@ -29,13 +29,6 @@ const router = createRouter({
           path: "/songlist",
           name: "songlist",
           component: () => import('@/views/songlist/Songlist.vue'),
-          children: [
-            {
-              path: '/:id',
-              name: 'songlistDetail',
-              component: () => import('@/views/songlist/SonglistDetail.vue'),
-            },
-          ],
         }
       ],
     }
