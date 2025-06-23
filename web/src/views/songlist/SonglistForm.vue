@@ -49,7 +49,7 @@
 <script setup>
 import { ref, reactive, nextTick, computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import { getSongPage } from '@/api/song.js';
+import { getSongList } from '@/api/song.js';
 import { addSongToSonglist, removeSongFromSonglist } from '@/api/songlist.js';
 
 // --- 响应式状态 ---
@@ -110,7 +110,7 @@ const open = (currentSonglistId, currentSongIds = []) => {
 const fetchAvailableSongs = async () => {
   loading.value = true;
   try {
-    const res = await getSongPage(songQueryParams);
+    const res = await getSongList(songQueryParams);
     if (res.code === '0') {
       availableSongs.value = res.data.records;
       availableSongsTotal.value = res.data.total;

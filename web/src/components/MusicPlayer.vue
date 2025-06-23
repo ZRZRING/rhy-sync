@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
   songs: {
@@ -69,7 +70,7 @@ const loadLyrics = () => {
     const lines = lrcText.split('\n');
     const lyricData = [];
 
-    lines.forEach(line => {
+    lines.forEach((line, index) => {
       // 解析LRC格式 [mm:ss.xx] 歌词文本
       const timeMatch = line.match(/\[(\d+):(\d+)\.(\d+)\]/);
       if (timeMatch) {
@@ -83,13 +84,22 @@ const loadLyrics = () => {
           lyricData.push({ time, text });
         }
       }
-      // 支持不带时间的纯文本歌词
+      // 支持不带时间的纯文本歌词，按行号分配时间
       else if (line.trim()) {
-        lyricData.push({ time: lyricData.length, text: line.trim() });
+        const time = index * 3; // 每行间隔3秒
+        lyricData.push({ time, text: line.trim() });
       }
     });
 
+    // 如果没有时间标记，使用默认时间间隔
+    if (lyricData.length > 0 && lyricData.every(item => item.time === 0)) {
+      lyricData.forEach((item, index) => {
+        item.time = index * 3; // 每行间隔3秒
+      });
+    }
+
     parsedLyrics.value = lyricData.sort((a, b) => a.time - b.time);
+    console.log('解析歌词成功:', parsedLyrics.value.length, '行');
   } catch (error) {
     console.error('歌词解析失败:', error);
     parsedLyrics.value = [];
@@ -100,30 +110,45 @@ const loadLyrics = () => {
 const updateCurrentLyric = () => {
   if (parsedLyrics.value.length === 0) return;
   
+  let newIndex = -1;
+  
+  // 找到当前时间对应的歌词行
   for (let i = 0; i < parsedLyrics.value.length; i++) {
-    if (currentTime.value < parsedLyrics.value[i].time) {
-      const newIndex = i - 1;
-      if (newIndex !== currentLyricIndex.value && newIndex >= 0) {
-        currentLyricIndex.value = newIndex;
-        
-        // 滚动到当前歌词
-        if (lyricsContainer.value && showLyrics.value) {
-          const activeLine = lyricsContainer.value.querySelector('.lyric-line.active');
-          if (activeLine) {
-            activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }
-      }
+    if (currentTime.value >= parsedLyrics.value[i].time) {
+      newIndex = i;
+    } else {
       break;
+    }
+  }
+  
+  // 只有当歌词索引发生变化时才更新
+  if (newIndex !== currentLyricIndex.value) {
+    currentLyricIndex.value = newIndex;
+    
+    // 滚动到当前歌词
+    if (lyricsContainer.value && showLyrics.value) {
+      setTimeout(() => {
+        const activeLine = lyricsContainer.value.querySelector('.lyric-line.active');
+        if (activeLine) {
+          activeLine.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'center'
+          });
+        }
+      }, 100);
     }
   }
 };
 
 // 播放/暂停
 const togglePlay = () => {
+  console.log('切换播放状态, 当前状态:', isPlaying.value);
   if (isPlaying.value) {
     audioPlayer.value.pause();
+    console.log('暂停播放');
   } else {
+    console.log('开始播放, 音频源:', audioPlayer.value.src);
     audioPlayer.value.play().catch(e => {
       console.error('播放失败:', e);
     });
@@ -158,12 +183,19 @@ const loadNewSong = () => {
   }
 
   isPlaying.value = false;
-  audioPlayer.value.src = currentSong.value.url;
+  const songUrl = currentSong.value.url;
+  console.log('加载歌曲:', currentSong.value.name, 'URL:', songUrl);
+  
+  audioPlayer.value.src = songUrl;
   loadLyrics();
+  
+  // 显示播放器
+  isVisible.value = true;
   
   if (props.autoPlay || isNewSongAdded.value) {
     isNewSongAdded.value = false;
     setTimeout(() => {
+      console.log('开始播放歌曲:', currentSong.value.name);
       togglePlay();
     }, 100);
   }
@@ -195,7 +227,7 @@ const seek = (e) => {
   audioPlayer.value.currentTime = newTime;
 };
 
-// 更新时间
+// 更新播放时间
 const updateTime = () => {
   currentTime.value = audioPlayer.value.currentTime;
   updateCurrentLyric();
@@ -228,6 +260,55 @@ const toggleLyrics = () => {
   showLyrics.value = !showLyrics.value;
 };
 
+// 播放列表相关
+const showPlaylist = ref(false);
+
+// 显示/隐藏播放列表
+const togglePlaylist = () => {
+  showPlaylist.value = !showPlaylist.value;
+};
+
+// 显示键盘快捷键帮助
+const showKeyboardHelp = () => {
+  ElMessage({
+    message: `
+键盘快捷键：
+空格键 - 播放/暂停
+← → 箭头键 - 上一首/下一首
+L键 - 切换歌词
+P键 - 切换播放列表
+M键 - 静音/取消静音
+    `,
+    type: 'info',
+    duration: 5000,
+    showClose: true
+  });
+};
+
+// 播放指定索引的歌曲
+const playSong = (index) => {
+  currentSongIndex.value = index;
+  isVisible.value = true;
+};
+
+// 从播放列表中移除歌曲
+const removeSong = (index) => {
+  if (props.songs.length <= 1) {
+    // 如果只剩一首歌，清空播放器
+    audioPlayer.value.src = '';
+    isPlaying.value = false;
+    isVisible.value = false;
+  } else if (currentSongIndex.value === index) {
+    // 如果删除的是当前播放的歌曲，播放下一首
+    if (index === props.songs.length - 1) {
+      currentSongIndex.value = index - 1;
+    }
+  } else if (currentSongIndex.value > index) {
+    // 如果删除的歌曲在当前歌曲之前，调整索引
+    currentSongIndex.value--;
+  }
+};
+
 // 监听当前歌曲变化
 watch(currentSongIndex, loadNewSong);
 watch(() => props.songs, (newSongs, oldSongs) => {
@@ -248,6 +329,59 @@ onMounted(() => {
   if (props.songs.length > 0) {
     loadNewSong();
   }
+  
+  // 添加键盘事件监听
+  const handleKeyDown = (event) => {
+    // 只有在播放器可见时才响应键盘事件
+    if (!isVisible.value) return;
+    
+    switch (event.code) {
+      case 'Space':
+        // 空格键控制播放/暂停
+        event.preventDefault(); // 阻止默认行为（页面滚动）
+        if (props.songs.length > 0) {
+          togglePlay();
+        }
+        break;
+      case 'ArrowLeft':
+        // 左箭头键：上一首
+        event.preventDefault();
+        if (props.songs.length > 1) {
+          prevSong();
+        }
+        break;
+      case 'ArrowRight':
+        // 右箭头键：下一首
+        event.preventDefault();
+        if (props.songs.length > 1) {
+          nextSong();
+        }
+        break;
+      case 'KeyL':
+        // L键：切换歌词显示
+        event.preventDefault();
+        toggleLyrics();
+        break;
+      case 'KeyP':
+        // P键：切换播放列表显示
+        event.preventDefault();
+        togglePlaylist();
+        break;
+      case 'KeyM':
+        // M键：静音/取消静音
+        event.preventDefault();
+        toggleMute();
+        break;
+    }
+  };
+  
+  // 添加全局键盘事件监听
+  document.addEventListener('keydown', handleKeyDown);
+  
+  // 组件卸载时移除事件监听
+  onUnmounted(() => {
+    document.removeEventListener('keydown', handleKeyDown);
+  });
 });
 </script>
 
@@ -299,12 +433,15 @@ onMounted(() => {
 
         <!-- 播放列表和歌词按钮 -->
         <div class="extra-controls">
-          <button class="playlist-btn" @click="togglePlaylist">
+          <button class="playlist-btn" @click="togglePlaylist" title="播放列表 (P)">
             <i class="icon-playlist"></i>
             <span class="badge" v-if="songs.length">{{ songs.length }}</span>
           </button>
-          <button class="lyrics-btn" @click="toggleLyrics">
+          <button class="lyrics-btn" @click="toggleLyrics" title="歌词 (L)">
             <i class="icon-lyrics"></i>
+          </button>
+          <button class="help-btn" @click="showKeyboardHelp" title="键盘快捷键">
+            <i class="icon-help">?</i>
           </button>
         </div>
       </div>
@@ -384,12 +521,13 @@ onMounted(() => {
   left: 0;
   right: 0;
   height: 80px;
-  background-color: #2c3e50;
-  color: white;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #2c3e50;
   z-index: 1000;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
   transform: translateY(100%);
   transition: transform 0.3s ease;
+  border-top: 2px solid #1abc9c;
 }
 
 .player-visible {
@@ -442,7 +580,7 @@ onMounted(() => {
 .artist {
   margin: 3px 0 0;
   font-size: 12px;
-  color: #bdc3c7;
+  color: #6c757d;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -460,7 +598,7 @@ onMounted(() => {
 .control-btn {
   background: none;
   border: none;
-  color: white;
+  color: #2c3e50;
   font-size: 18px;
   cursor: pointer;
   padding: 8px;
@@ -481,6 +619,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
 }
 
 .play-btn:hover {
@@ -499,7 +638,7 @@ onMounted(() => {
 .progress-bar {
   flex-grow: 1;
   height: 4px;
-  background-color: #7f8c8d;
+  background-color: #dee2e6;
   border-radius: 2px;
   cursor: pointer;
   margin: 0 10px;
@@ -514,7 +653,7 @@ onMounted(() => {
 
 .time {
   font-size: 11px;
-  color: #bdc3c7;
+  color: #6c757d;
   min-width: 40px;
 }
 
@@ -529,7 +668,7 @@ onMounted(() => {
 .volume-bar {
   flex-grow: 1;
   height: 4px;
-  background-color: #7f8c8d;
+  background-color: #dee2e6;
   border-radius: 2px;
   cursor: pointer;
   margin-left: 10px;
@@ -548,10 +687,10 @@ onMounted(() => {
   margin-left: 15px;
 }
 
-.playlist-btn, .lyrics-btn {
+.playlist-btn, .lyrics-btn, .help-btn {
   background: none;
   border: none;
-  color: white;
+  color: #2c3e50;
   font-size: 18px;
   cursor: pointer;
   padding: 8px;
@@ -561,7 +700,7 @@ onMounted(() => {
   position: relative;
 }
 
-.playlist-btn:hover, .lyrics-btn:hover {
+.playlist-btn:hover, .lyrics-btn:hover, .help-btn:hover {
   color: #1abc9c;
 }
 
@@ -580,6 +719,28 @@ onMounted(() => {
   justify-content: center;
 }
 
+.help-btn {
+  background: none;
+  border: none;
+  color: #2c3e50;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  margin: 0 5px;
+  outline: none;
+  transition: color 0.2s;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-btn:hover {
+  background-color: rgba(26, 188, 156, 0.1);
+}
+
 /* 歌词面板 */
 .lyrics-panel {
   position: absolute;
@@ -587,10 +748,12 @@ onMounted(() => {
   left: 0;
   right: 0;
   height: 0;
-  background-color: rgba(44, 62, 80, 0.95);
+  background-color: #ffffff;
   overflow: hidden;
   transition: height 0.3s ease;
   z-index: 999;
+  border-top: 1px solid #e9ecef;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .lyrics-show {
@@ -602,23 +765,26 @@ onMounted(() => {
   overflow-y: auto;
   padding: 20px;
   text-align: center;
+  background-color: #ffffff;
 }
 
 .lyric-line {
   margin: 15px 0;
   font-size: 16px;
-  color: #bdc3c7;
+  color: #6c757d;
   transition: all 0.3s;
+  line-height: 1.6;
 }
 
 .lyric-line.active {
   color: #1abc9c;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(26, 188, 156, 0.3);
 }
 
 .no-lyrics {
-  color: #7f8c8d;
+  color: #adb5bd;
   font-size: 14px;
   margin-top: 50px;
 }
@@ -630,11 +796,12 @@ onMounted(() => {
   right: -400px;
   width: 350px;
   height: calc(100vh - 80px);
-  background-color: rgba(44, 62, 80, 0.95);
+  background-color: rgba(248, 249, 250, 0.95);
   transition: right 0.3s ease;
   z-index: 1001;
   border-top-left-radius: 8px;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dee2e6;
 }
 
 .playlist-show {
@@ -646,18 +813,20 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  border-bottom: 1px solid #34495e;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
 }
 
 .playlist-header h3 {
   margin: 0;
   font-size: 16px;
+  color: #2c3e50;
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: #bdc3c7;
+  color: #6c757d;
   font-size: 16px;
   cursor: pointer;
   padding: 5px;
@@ -682,7 +851,7 @@ onMounted(() => {
 }
 
 .playlist-item:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(26, 188, 156, 0.1);
 }
 
 .playlist-item.active {
@@ -711,12 +880,13 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #2c3e50;
 }
 
 .item-artist {
   margin: 3px 0 0;
   font-size: 12px;
-  color: #bdc3c7;
+  color: #6c757d;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -724,7 +894,7 @@ onMounted(() => {
 
 .item-duration {
   font-size: 12px;
-  color: #bdc3c7;
+  color: #6c757d;
   margin: 0 12px;
   flex-shrink: 0;
 }
@@ -732,7 +902,7 @@ onMounted(() => {
 .item-remove {
   background: none;
   border: none;
-  color: #bdc3c7;
+  color: #6c757d;
   font-size: 14px;
   cursor: pointer;
   padding: 5px;
@@ -750,7 +920,7 @@ onMounted(() => {
 }
 
 .empty-playlist {
-  color: #7f8c8d;
+  color: #6c757d;
   text-align: center;
   padding: 50px 0;
 }
@@ -797,4 +967,5 @@ onMounted(() => {
 .icon-playlist::before { content: '📋'; }
 .icon-close::before { content: '✕'; }
 .icon-remove::before { content: '🗑'; }
+.icon-help::before { content: '❓'; }
 </style>

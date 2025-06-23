@@ -49,4 +49,26 @@ public class AdminController {
         }
         return ResultUtil.returnFail("用户名或密码错误");
     }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody Admin admin) {
+        // 检查用户名是否已存在
+        QueryWrapper<Admin> wrapper = new QueryWrapper<>();
+        wrapper.eq("name", admin.getName());
+        Admin existAdmin = adminService.getOne(wrapper);
+        if (existAdmin != null) {
+            return ResultUtil.returnFail("用户名已存在");
+        }
+        // 简单校验
+        if (admin.getName() == null || admin.getName().trim().isEmpty() ||
+                admin.getPassword() == null || admin.getPassword().trim().isEmpty()) {
+            return ResultUtil.returnFail("用户名和密码不能为空");
+        }
+        boolean res = adminService.save(admin);
+        if (res) {
+            return ResultUtil.returnSuccess("注册成功");
+        } else {
+            return ResultUtil.returnFail("注册失败");
+        }
+    }
 }

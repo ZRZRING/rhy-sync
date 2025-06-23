@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from "element-plus";
-import { useRouter } from "vue-router";
 
 const baseURL = "http://localhost:9999";
 export function reqeust(config) {
-  const router = useRouter()
   const instance = axios.create({
     baseURL,
     timeout: 5000,
@@ -27,7 +25,8 @@ export function reqeust(config) {
   // 响应拦截器
   instance.interceptors.response.use(
     (res) => {
-      if (res.data.code == 0) {
+      // 支持多种成功状态码
+      if (res.data.code == 0 || res.data.code == 200 || res.data.code == "0" || res.data.code == "200") {
         return res.data;
       }
       // 业务请求异常
@@ -35,14 +34,15 @@ export function reqeust(config) {
       if (res.data.code == 1008) {
         const userStore = useUserStore()
         userStore.setToken(null)
-        router.push({ name: 'login' })
+        // 移除router跳转，让组件自己处理
+        console.warn('Token已过期，请重新登录')
       }
+      return Promise.reject(res.data);
     },
     (err) => {
       return Promise.reject(err);
     }
   );
-
 
   return instance(config);
 }
@@ -55,10 +55,12 @@ export function get(url, params) {
   });
 }
 export function post(url, data) {
+  console.log('发送POST请求:', url, data)
+  
   return reqeust({
     url,
     method: "post",
-    data:JSON.stringify(data),
+    data: data,
     headers: {
       'Content-Type': 'application/json'
     }
@@ -84,5 +86,4 @@ export function del(url, data) {
     }
   });
 }
-
 export { baseURL };

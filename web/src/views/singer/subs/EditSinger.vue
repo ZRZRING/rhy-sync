@@ -28,9 +28,14 @@ const upload = (url) => {
 }
 const onSubmit =async () => {  
   const res = await addSinger(form.value)  
-  console.log(res);  
+  console.log(res); 
+  if(res.code === 200 || res.code === "200" || res.code === 0 || res.code === "0") {
+    ElMessage.success(res.msg || '添加成功')
+    drawer.value = false
+  } else { 
   ElMessage.success(res.msg)
   drawer.value = false
+  }
 }
 
 </script>

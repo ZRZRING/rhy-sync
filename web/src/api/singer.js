@@ -14,3 +14,18 @@ export function addSinger(data){
   }
   return post('/singer/add',data)
 }
+// 编辑歌手
+export function updateSinger(data){
+  if (data.birth instanceof Date) {
+    data.birth = formatDate2(data.birth);
+  }
+  return post('/singer/update',data)
+}
+// 删除歌手
+export function deleteSinger(id) {
+  return post('/singer/delete',{id})
+}
+// 获取按地区分类的歌手列表
+export function getSingerListByRegion() {
+  return get('/singer/region')
+}
