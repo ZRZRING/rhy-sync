@@ -2,6 +2,7 @@ package cn.Rhysync.musicserver.service;
 
 import cn.Rhysync.musicserver.domain.entity.Song;
 import com.baomidou.mybatisplus.extension.service.IService;
+import java.util.List;
 
 /**
  * <p>

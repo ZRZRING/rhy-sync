@@ -3,6 +3,7 @@ package cn.Rhysync.musicserver.controller;
 import cn.Rhysync.musicserver.domain.dto.AddSongToListDto;
 import cn.Rhysync.musicserver.domain.dto.Result;
 import cn.Rhysync.musicserver.domain.dto.ResultUtil;
+import cn.Rhysync.musicserver.domain.dto.UpdateSongListSongsDto;
 import cn.Rhysync.musicserver.domain.entity.ListSong;
 import cn.Rhysync.musicserver.domain.entity.Song;
 import cn.Rhysync.musicserver.domain.entity.SongList;
@@ -98,7 +99,13 @@ public class SongListController {
         return isSuccess ? ResultUtil.returnSuccess("删除歌单成功") : ResultUtil.returnFail("删除歌单失败");
     }
 
-
+    @PutMapping("/{songListId}/songs")
+    public Result updateSongListSongs(
+            @PathVariable Integer songListId,
+            @RequestBody UpdateSongListSongsDto dto) {
+        boolean success = songListService.updateSongsInList(songListId, dto.getSongsToAdd(), dto.getSongsToRemove());
+        return success ? ResultUtil.returnSuccess("歌单歌曲更新成功") : ResultUtil.returnFail("歌单歌曲更新失败");
+    }
 
     /**
      * 向歌单中添加一首歌曲

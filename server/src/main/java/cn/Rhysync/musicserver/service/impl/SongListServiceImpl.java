@@ -11,26 +11,49 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class SongListServiceImpl extends ServiceImpl<SongListMapper, SongList> implements ISongListService {
 
-    // 确保注入了 IListSongService
     private final IListSongService listSongService;
 
-    /**
-     * 实现接口中定义的方法
-     * 请确保这个方法完整地存在于你的类中
-     */
     @Override
-    @Transactional(rollbackFor = Exception.class) // 声明这是一个事务性操作
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteSongListAndSongs(Integer id) {
-        // 1. 删除中间表中的关联关系
         QueryWrapper<ListSong> wrapper = new QueryWrapper<>();
         wrapper.eq("song_list_id", id);
         listSongService.remove(wrapper);
-
-        // 2. 删除歌单本身
         return this.removeById(id);
+    }
+
+    /**
+     * 新增的批量更新方法实现
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateSongsInList(Integer songListId, List<Integer> songsToAdd, List<Integer> songsToRemove) {
+        // 1. 处理移除
+        if (songsToRemove != null && !songsToRemove.isEmpty()) {
+            QueryWrapper<ListSong> removeWrapper = new QueryWrapper<>();
+            removeWrapper.eq("song_list_id", songListId).in("song_id", songsToRemove);
+            listSongService.remove(removeWrapper);
+        }
+
+        // 2. 处理添加
+        if (songsToAdd != null && !songsToAdd.isEmpty()) {
+            // 将歌曲ID列表转换为 ListSong 实体列表
+            List<ListSong> newLinks = songsToAdd.stream().map(songId -> {
+                ListSong link = new ListSong();
+                link.setSongListId(songListId);
+                link.setSongId(songId);
+                return link;
+            }).collect(Collectors.toList());
+            listSongService.saveBatch(newLinks);
+        }
+
+        return true;
     }
 }
