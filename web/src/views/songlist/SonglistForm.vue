@@ -41,7 +41,7 @@
 import { ref, reactive, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
 import { getSongPage } from '@/api/song.js';
-import { addSongToSonglist } from '@/api/songlist.js';
+import { addSongToSonglist, removeSongFromSonglist } from '@/api/songlist.js';
 
 // --- 响应式状态 ---
 const visible = ref(false);
@@ -110,28 +110,53 @@ const handleSongSelectionChange = (selection) => {
   songSelection.value = selection;
 };
 
-/** 确认添加所选歌曲 */
+/** 确认修改歌单中的歌曲（添加或移除） */
 const handleConfirmAddSongs = async () => {
+  const finalSongIds = new Set(songSelection.value.map(song => song.id));
+
+  // 筛选出需要添加的歌曲 (在最终选择中，但不在初始列表中)
   const songsToAdd = songSelection.value.filter(song => !initialSongIds.value.has(song.id));
 
-  if (songsToAdd.length === 0) {
-    ElMessage.info("没有新的歌曲需要添加");
+  // 筛选出需要移除的歌曲ID (在初始列表中，但不在最终选择中)
+  const songIdsToRemove = [...initialSongIds.value].filter(id => !finalSongIds.has(id));
+
+  // 如果没有任何变化，则提示用户并关闭
+  if (songsToAdd.length === 0 && songIdsToRemove.length === 0) {
+    ElMessage.info("歌单中的歌曲未作任何修改");
+    visible.value = false;
     return;
   }
 
+  // 创建 API 请求的 Promise 数组
   const addPromises = songsToAdd.map(song =>
     addSongToSonglist(songlistId.value, { songId: song.id })
   );
 
+  const removePromises = songIdsToRemove.map(songId =>
+    removeSongFromSonglist(songlistId.value, songId)
+  );
+
+  const allPromises = [...addPromises, ...removePromises];
+
   try {
-    await Promise.all(addPromises);
-    ElMessage.success(`成功添加 ${songsToAdd.length} 首歌曲`);
+    await Promise.all(allPromises);
+    let successMessage = '歌单已成功更新。';
+    if (songsToAdd.length > 0 && songIdsToRemove.length > 0) {
+      successMessage = `成功添加 ${songsToAdd.length} 首, 移除 ${songIdsToRemove.length} 首歌曲。`;
+    } else if (songsToAdd.length > 0) {
+      successMessage = `成功添加 ${songsToAdd.length} 首歌曲。`;
+    } else if (songIdsToRemove.length > 0) {
+      successMessage = `成功移除 ${songIdsToRemove.length} 首歌曲。`;
+    }
+    
+    ElMessage.success(successMessage);
     visible.value = false;
     emit('success'); // 通知父组件刷新
   } catch (error) {
-    ElMessage.error("添加歌曲时发生错误");
+    ElMessage.error("更新歌单时发生错误");
   }
 };
+
 
 /** 关闭弹窗时的清理 */
 const handleClose = () => {
